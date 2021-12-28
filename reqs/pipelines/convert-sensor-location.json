@@ -1,0 +1,17 @@
+
+{
+    "processors": [
+      {
+        "set": {
+          "field": "location.lat",
+          "value": "{{latitude}}"
+        }
+      },
+      {
+        "set": {
+          "field": "location.lon",
+          "value": "{{longitude}}"
+        }
+      }
+    ]
+  }

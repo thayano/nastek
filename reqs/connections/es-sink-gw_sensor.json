@@ -1,19 +1,20 @@
 {
-  "name": "es-sink-posts",
+  "name": "es-sink-gw_sensor",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
     "tasks.max": "1",
-    "topics": "posts",
+    "topics": "gw_sensor",
     "connection.url": "http://elasticsearch:9200",
-    "transforms": "unwrap,routeTS",
+    "transforms": "unwrap,routeTS,key",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
     "transforms.unwrap.drop.deletes": "false",
     "transforms.routeTS.type":"org.apache.kafka.connect.transforms.TimestampRouter",  
     "transforms.routeTS.topic.format":"${topic}-${timestamp}",  
     "transforms.routeTS.timestamp.format":"yyyy.MM.dd",
-    "key.ignore": "true",
-    "schema.ignore": "true",
+    "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.key.field": "sn",
+    "key.ignore": "false",
     "behavior.on.null.values": "delete"
   }
 }
