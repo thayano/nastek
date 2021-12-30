@@ -1,0 +1,47 @@
+{
+    "mappings": {
+      "_doc": {
+        "properties": {
+          "latitude": {
+            "type": "geo_point"
+          },
+          "longitude": {
+            "type": "geo_point"
+          },
+          "phase": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "processed": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "sensor_sn": {
+            "type": "integer"
+          },
+          "sensor_type": {
+            "type": "integer"
+          },
+          "server_local": {
+            "type": "date"
+          },
+          "server_utc": {
+            "type": "date"
+          },
+          "sn": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  }

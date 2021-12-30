@@ -1,16 +1,16 @@
 {
-  "name": "db_teste-connector",
+  "name": "db_teste_elk-connector",
   "config": {
     "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
-    "tasks.max": "1",
+    "tasks.max": "10",
     "plugin.name": "pgoutput",
     "publication.autocreate.mode": "filtered",
-    "database.hostname": "postgres",
+    "database.hostname": "192.168.21.53",
     "database.port": "5432",
     "database.user": "postgres",
     "database.password": "postgres",
     "database.server.id": "184054",
-    "database.dbname": "db_teste",
+    "database.dbname": "db_teste_elk",
     "database.server.name": "postgres",
     "skipped.operations": "d",
     "key.converter.schemas.enabled":"false",
@@ -25,9 +25,13 @@
     "topic.creation.default.cleanup.policy": "delete",
     "topic.creation.default.retention.ms": 30000,
     "topic.creation.default.compression.type": "lz4",
-    "transforms": "route",
+    "transforms": "route, timestamp",
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.route.regex": "([^.]+)\\.([^.]+)\\.([^.]+)",
-    "transforms.route.replacement": "$3"
+    "transforms.route.replacement": "$3",
+    "transforms.timestamp.type": "org.apache.kafka.connect.transforms.TimestampConverter$Value",
+    "transforms.timestamp.target.type": "Timestamp",
+    "transforms.timestamp.field": "DATE_TIME",
+    "transforms.timestamp.format": "yyyy-MM-dd HH:mm:ss"
   }
 }

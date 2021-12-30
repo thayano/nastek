@@ -2,7 +2,7 @@ version: "3"
 services:
   zookeeper:
     image: debezium/zookeeper:1.6
-    restart: always
+    # restart: always
     ports:
       - 2181:2181
       - 2888:2888
@@ -10,7 +10,7 @@ services:
 
   kafka:
     image: debezium/kafka:1.6
-    restart: always
+    # restart: always
     ports:
       - 9092:9092
     links:
@@ -20,7 +20,7 @@ services:
   
   kafdrop:
     image: obsidiandynamics/kafdrop
-    restart: "always"
+    # restart: "always"
     ports:
       - "9000:9000"
     environment:
@@ -33,35 +33,25 @@ services:
 
   apicurio:
     image: apicurio/apicurio-registry-mem:2.0.0.Final
-    restart: always
+    # restart: always
     ports:
       - 8080:8080
 
-  postgres:
-    build: ./postgres
-    restart: always
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DATABASE=db_teste
-
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
-    restart: always
+    # restart: always
     ports:
       - 9200:9200
     environment:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
       - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
       - TZ=America/Campo_Grande
   
   kibana:
     image: docker.elastic.co/kibana/kibana:7.14.1
-    restart: always
+    # restart: always
     depends_on: 
       - "elasticsearch"
     ports: 
@@ -73,12 +63,11 @@ services:
 
   connect:
     build: ./debezium-elastic
-    restart: always
+    # restart: always
     ports:
       - 8083:8083
     links:
       - kafka
-      - postgres
       - elasticsearch
       - apicurio
     environment:
@@ -98,4 +87,10 @@ services:
       - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_URL=http://apicurio:8080/apis/registry/v2
       - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER=true
       - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_FIND-LATEST=true
-      - TZ=America/Sao_Paulo
+      - TZ=America/Campo_Grande
+      - DATABASE_URL=postgres://postgres:postgres@db_teste_elk:5432
+      # - POSTGRES_HOST=192.168.21.53
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_PASSWORD=postgres
+      # - POSTGRES_DATABASE=db_teste_elk
+      
