@@ -38,7 +38,7 @@ services:
       - 8080:8080
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
     # restart: always
     ports:
       - 9200:9200
@@ -46,11 +46,15 @@ services:
       - http.host=0.0.0.0
       - transport.host=127.0.0.1
       - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.authc.api_key.enabled=false
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=elkstack
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
-      - TZ=America/Campo_Grande
+      - "TZ=America/Campo_Grande"
   
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.14.1
+    image: docker.elastic.co/kibana/kibana:7.16.2
     # restart: always
     depends_on: 
       - "elasticsearch"
@@ -58,7 +62,12 @@ services:
       - 5601:5601
     environment: 
       - "ELASTICSEARCH_HOSTS=http://elasticsearch:9200"
-      - TZ=America/Campo_Grande
+      - "ELASTICSEARCH_USERNAME=elastic"
+      - "ELASTICSEARCH_PASSWORD=elkstack"
+      - "TELEMETRY_ENABLED=false"
+      - "NEWSFEED_ENABLED=false"
+      - "TZ=America/Campo_Grande"
+      
 
 
   connect:
@@ -87,7 +96,7 @@ services:
       - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_URL=http://apicurio:8080/apis/registry/v2
       - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER=true
       - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_FIND-LATEST=true
-      - TZ=America/Campo_Grande
+      - "TZ=America/Campo_Grande"
       - DATABASE_URL=postgres://postgres:postgres@db_teste_elk:5432
       # - POSTGRES_HOST=192.168.21.53
       # - POSTGRES_USER=postgres
