@@ -12,7 +12,6 @@
     "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
     "transforms.key.field": "sn",
     "key.ignore": "false",
-    "schema.ignore": "false",
     "behavior.on.null.values": "delete"
   }
 }

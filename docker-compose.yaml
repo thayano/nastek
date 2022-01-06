@@ -1,7 +1,7 @@
 version: "3"
 services:
   zookeeper:
-    image: debezium/zookeeper:1.6
+    image: debezium/zookeeper:${DEBEZIUM_VERSION}
     # restart: always
     ports:
       - 2181:2181
@@ -9,7 +9,7 @@ services:
       - 3888:3888
 
   kafka:
-    image: debezium/kafka:1.6
+    image: debezium/kafka:${DEBEZIUM_VERSION}
     # restart: always
     ports:
       - 9092:9092
@@ -31,14 +31,8 @@ services:
     links:
       - kafka
 
-  apicurio:
-    image: apicurio/apicurio-registry-mem:2.0.0.Final
-    # restart: always
-    ports:
-      - 8080:8080
-
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.16.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_VERSION}
     # restart: always
     ports:
       - 9200:9200
@@ -48,13 +42,11 @@ services:
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
       - xpack.security.authc.api_key.enabled=false
-      - discovery.type=single-node
       - ELASTIC_PASSWORD=elkstack
       - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
-      - "TZ=America/Campo_Grande"
   
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.16.2
+    image: docker.elastic.co/kibana/kibana:${ELK_VERSION}
     # restart: always
     depends_on: 
       - "elasticsearch"
@@ -65,41 +57,20 @@ services:
       - "ELASTICSEARCH_USERNAME=elastic"
       - "ELASTICSEARCH_PASSWORD=elkstack"
       - "TELEMETRY_ENABLED=false"
-      - "NEWSFEED_ENABLED=false"
-      - "TZ=America/Campo_Grande"
-      
-
 
   connect:
-    build: ./debezium-elastic
+    image:  debezium/connect:${DEBEZIUM_VERSION}
     # restart: always
     ports:
       - 8083:8083
     links:
       - kafka
       - elasticsearch
-      - apicurio
     environment:
       - BOOTSTRAP_SERVERS=kafka:9092
       - GROUP_ID=1
       - CONFIG_STORAGE_TOPIC=my_connect_configs
       - OFFSET_STORAGE_TOPIC=my_connect_offsets
       - STATUS_STORAGE_TOPIC=my_connect_statuses
-      - ENABLE_APICURIO_CONVERTERS=true
-      - KEY_CONVERTER=io.apicurio.registry.utils.converter.AvroConverter
-      - VALUE_CONVERTER=io.apicurio.registry.utils.converter.AvroConverter
-      - CONNECT_KEY_CONVERTER=io.apicurio.registry.utils.converter.AvroConverter
-      - CONNECT_KEY_CONVERTER_APICURIO.REGISTRY_URL=http://apicurio:8080/apis/registry/v2
-      - CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER=true
-      - CONNECT_KEY_CONVERTER_APICURIO_REGISTRY_FIND-LATEST=true
-      - CONNECT_VALUE_CONVERTER=io.apicurio.registry.utils.converter.AvroConverter
-      - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_URL=http://apicurio:8080/apis/registry/v2
-      - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_AUTO-REGISTER=true
-      - CONNECT_VALUE_CONVERTER_APICURIO_REGISTRY_FIND-LATEST=true
-      - "TZ=America/Campo_Grande"
       - DATABASE_URL=postgres://postgres:postgres@db_teste_elk:5432
-      # - POSTGRES_HOST=192.168.21.53
-      # - POSTGRES_USER=postgres
-      # - POSTGRES_PASSWORD=postgres
-      # - POSTGRES_DATABASE=db_teste_elk
       

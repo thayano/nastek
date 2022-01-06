@@ -2,8 +2,8 @@
   "name": "es-sink-gw_data",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
-    "tasks.max": "2",
-    "topics": "gw_events,gw_periods",
+    "tasks.max": "1",
+    "topics": "gw_periods,gw_events",
     "connection.url": "http://elasticsearch:9200",
     "transforms": "unwrap,key",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
@@ -11,7 +11,7 @@
     "transforms.unwrap.drop.deletes": "false",
     "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
     "transforms.key.field": "id",
-    "key.ignore": "false",
+    "key.ignore": "true",
     "behavior.on.null.values": "delete"
   }
 }
