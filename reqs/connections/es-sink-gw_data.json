@@ -11,7 +11,7 @@
     "transforms.unwrap.drop.deletes": "false",
     "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
     "transforms.key.field": "id",
-    "key.ignore": "true",
+    "key.ignore": "false",
     "behavior.on.null.values": "delete"
   }
 }

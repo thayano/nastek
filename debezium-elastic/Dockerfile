@@ -1,21 +1,9 @@
 #https://raw.githubusercontent.com/debezium/debezium-examples/master/unwrap-smt/debezium-jdbc-es/Dockerfile
 
-FROM debezium/connect:1.6
-#COPY kafka-connect-elasticsearch connect/kafka-connect-elasticsearch
-#ENV KAFKA_CONNECT_JDBC_DIR=$KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-jdbc \
-ENV    KAFKA_CONNECT_ES_DIR=$KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-elasticsearch
-#
-#ARG POSTGRES_VERSION=42.2.8
-#ARG KAFKA_JDBC_VERSION=5.3.1
-#
-## Deploy PostgreSQL JDBC Driver
-#RUN cd /kafka/libs && curl -sO https://jdbc.postgresql.org/download/postgresql-$POSTGRES_VERSION.jar
-#
-## Deploy Kafka Connect JDBC
-#RUN mkdir $KAFKA_CONNECT_JDBC_DIR && cd $KAFKA_CONNECT_JDBC_DIR &&\
-#	curl -sO http://packages.confluent.io/maven/io/confluent/kafka-connect-jdbc/$KAFKA_JDBC_VERSION/kafka-connect-jdbc-$KAFKA_JDBC_VERSION.jar
-#
-## Deploy Confluent Elasticsearch sink connector
+FROM debezium/connect
+ENV KAFKA_CONNECT_ES_DIR=$KAFKA_CONNECT_PLUGINS_DIR/kafka-connect-elasticsearch
+
+# Deploy Confluent Elasticsearch sink connector
 RUN mkdir $KAFKA_CONNECT_ES_DIR && cd $KAFKA_CONNECT_ES_DIR &&\
         curl -sO http://packages.confluent.io/maven/io/confluent/kafka-connect-elasticsearch/11.1.0/kafka-connect-elasticsearch-11.1.0.jar && \
         curl -sO https://repo1.maven.org/maven2/org/elasticsearch/elasticsearch/7.9.3/elasticsearch-7.9.3.jar && \

@@ -1,7 +1,7 @@
 version: "3"
 services:
   zookeeper:
-    image: debezium/zookeeper:${DEBEZIUM_VERSION}
+    image: debezium/zookeeper
     # restart: always
     ports:
       - 2181:2181
@@ -9,7 +9,7 @@ services:
       - 3888:3888
 
   kafka:
-    image: debezium/kafka:${DEBEZIUM_VERSION}
+    image: debezium/kafka
     # restart: always
     ports:
       - 9092:9092
@@ -59,8 +59,7 @@ services:
       - "TELEMETRY_ENABLED=false"
 
   connect:
-    image:  debezium/connect:${DEBEZIUM_VERSION}
-    # restart: always
+    build: ./debezium-elastic
     ports:
       - 8083:8083
     links:
@@ -72,5 +71,5 @@ services:
       - CONFIG_STORAGE_TOPIC=my_connect_configs
       - OFFSET_STORAGE_TOPIC=my_connect_offsets
       - STATUS_STORAGE_TOPIC=my_connect_statuses
-      - DATABASE_URL=postgres://postgres:postgres@db_teste_elk:5432
+      # - DATABASE_URL=postgres://postgres:postgres@db_teste_elk:5432
       
