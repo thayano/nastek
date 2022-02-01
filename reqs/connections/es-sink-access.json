@@ -1,17 +1,19 @@
 {
-  "name": "es-sink-gw_sensor",
+  "name": "es-sink-access",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
     "tasks.max": "1",
-    "topics": "gw_sensor",
+    "topics": "access",
     "connection.url": "http://elasticsearch:9200",
     "transforms": "unwrap,key",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
     "transforms.unwrap.drop.tombstones": "false",
     "transforms.unwrap.drop.deletes": "false",
     "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-    "transforms.key.field": "sn",
+    "transforms.key.field": "id",
     "key.ignore": "false",
-    "behavior.on.null.values": "delete"
+    "behavior.on.null.values": "delete",
+    "connection.username": "elastic",
+    "connection.password":"elkstack"
   }
 }

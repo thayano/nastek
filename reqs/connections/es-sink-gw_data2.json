@@ -1,9 +1,9 @@
 {
-  "name": "es-sink-gw_data",
+  "name": "es-sink-gw_data2",
   "config": {
     "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
     "tasks.max": "1",
-    "topics": "gw_periods,gw_events",
+    "topics": "tensao,energia_ativa,energia_reativa,energia_total",
     "connection.url": "http://elasticsearch:9200",
     "transforms": "unwrap,key",
     "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
@@ -12,6 +12,8 @@
     "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
     "transforms.key.field": "id",
     "key.ignore": "false",
-    "behavior.on.null.values": "delete"
+    "behavior.on.null.values": "delete",
+    "connection.username": "elastic",
+    "connection.password":"elkstack"
   }
 }
